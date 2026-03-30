@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Margins — Global Styles
+   ============================================================ */
+
+@theme {
+  --color-background: #FAFAF8;
+  --color-foreground: #1a1a1a;
+  --color-accent: #E07A5F;
+  --color-secondary: #457B9D;
+  --color-muted: #F5F5F0;
+  --color-muted-text: #6B6B6B;
+  --color-border: #E8E6E1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #FAFAF8;
+  color: #1a1a1a;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selection highlight */
+::selection {
+  background-color: rgba(224, 122, 95, 0.3);
+  color: inherit;
+}
+
+::-moz-selection {
+  background-color: rgba(224, 122, 95, 0.3);
+  color: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E8E6E1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D0CEC9;
+}
