@@ -24,18 +24,19 @@ const SAMPLE_ARTICLE_ID = "sample-article";
 
 const SAMPLE_ARTICLE = {
   id: SAMPLE_ARTICLE_ID,
-  title: "Network Effects in Knowledge Platforms",
+  title: "Higher-Dimensional Black Holes",
   subtitle:
-    "Why the most valuable communities do not grow by accelerating attention, but by compounding interpretation.",
-  author: "Asha Menon",
-  readTimeMinutes: 8,
+    "We review black-hole solutions of higher-dimensional vacuum gravity and higher-dimensional supergravity theories.",
+  author: "Physics Research",
+  readTimeMinutes: 10,
   content: [
-    "Most networked products become more useful as more people participate. But in knowledge platforms, participation alone does not guarantee value. A thousand reactions can still produce very little understanding if the system rewards immediacy over interpretation.",
-    "The strongest knowledge networks do not merely distribute information; they preserve context. They help readers return to a passage, see where others lingered, and understand why a sentence mattered enough to invite reflection. This is a slower form of compounding, but a more durable one.",
-    "In attention markets, friction is treated as failure. Every extra second is a drop-off risk. In serious reading, some friction is actually protective. It signals care. It gives thought enough time to gather shape before it is converted into a public statement.",
-    "That is why the margin is such a powerful design space. A margin note does not float away from the passage that sparked it. It remains accountable to the text. It asks the reader not only to have an opinion, but to have earned one through contact with specific words.",
-    "When a platform lets readers see where depth accumulated, it changes the social contract. People begin to read not as isolated consumers, but as participants in a shared interpretive project. The article becomes the first layer; the conversation becomes the second.",
-    "The real network effect, then, is not more noise. It is trust in the quality of attention surrounding a text. When that trust exists, each thoughtful annotation makes the next reader more likely to read carefully, think seriously, and add something of consequence in return.",
+    "Classical general relativity in more than four spacetime dimensions has been the subject of increasing attention in recent years. Among the reasons it should be interesting to study this extension of Einstein’s theory, and in particular its black-hole solutions, we may mention that",
+    "String theory contains gravity and requires more than four dimensions. In fact, the first successful statistical counting of black-hole entropy in string theory was performed for a five-dimensional black hole [229]. This example provides the best laboratory for the microscopic string theory of black holes.",
+    "The AdS/CFT correspondence relates the dynamics of a d-dimensional black hole with those of a quantum field theory in d − 1 dimensions [187] (for a review see [1]).",
+    "The production of higher-dimensional black holes in future colliders becomes a conceivable possibility in scenarios involving large extra dimensions and TeV-scale gravity [30, 155].",
+    "As mathematical objects, black-hole spacetimes are among the most important Lorentzian Ricci-flat manifolds in any dimension.",
+    "These, however, refer to applications of the subject — important though they are — but we believe that higher-dimensional gravity is also of intrinsic interest. Just as the study of quantum field theories, with a field content very different than any conceivable extension of the Standard Model, has been a very useful endeavor, throwing light on general features of quantum fields, we believe that endowing general relativity with a tunable parameter — namely the spacetime dimensionality d — should also lead to valuable insights into the nature of the theory, in particular into its most basic objects: black holes. For instance, four-dimensional black holes are known to have a number of remarkable features, such as uniqueness, spherical topology, dynamical stability, and to satisfy a set of simple laws — the laws of black hole mechanics. One would like to know which of these are peculiar to four-dimensions, and which hold more generally. At the very least, this study will lead to a deeper understanding of classical black holes and of what spacetime can do at its most extreme.",
+    "There is a growing awareness that the physics of higher-dimensional black holes can be markedly different, and much richer, than in four dimensions. Arguably, two advances are largely responsible for this perception: the discovery of dynamical instabilities in extended black-hole horizons [118] and the discovery of black-hole solutions with horizons of nonspherical topology that are not fully characterized by their conserved charges [83]."
   ],
 };
 
@@ -205,7 +206,6 @@ function MarginColumn() {
 }
 
 function AnnotationModal() {
-  const { user } = useAuth();
   const {
     isAnnotationModalOpen,
     highlightedText,
@@ -225,7 +225,7 @@ function AnnotationModal() {
   }, [isAnnotationModalOpen]);
 
   const handleSubmit = async () => {
-    if (!user || !body.trim()) return;
+    if (!body.trim()) return;
     const created = await createAnnotation({
       type: annotationType,
       body,

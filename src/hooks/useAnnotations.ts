@@ -16,33 +16,56 @@ const MOCK_ANNOTATIONS: Annotation[] = [
     paragraphId: "p-2",
     paragraphIndex: 1,
     userId: "user-2",
-    userName: "Priya S.",
-    userInstitution: "IIM-A",
-    userDepthLevel: 3,
+    userName: "Stephen H.",
+    userInstitution: "Cambridge",
+    userDepthLevel: 4,
     type: "insight",
     highlightedText:
-      "Knowledge compounds through context, not velocity.",
-    body: "This is the essential distinction. Attention systems extract reaction; knowledge systems preserve interpretation. The latter become more useful the more carefully they are layered.",
+      "first successful statistical counting of black-hole entropy in string theory was performed for a five-dimensional black hole",
+    body: "String theory providing a microscopic counting matching the Bekenstein-Hawking entropy formula was a monumental breakthrough in quantum gravity.",
     createdAt: "2024-12-01T10:30:00Z",
-    replyCount: 3,
-    replies: [],
+    replyCount: 2,
+    replies: [
+      {
+        id: "reply-1",
+        userId: "user-4",
+        userName: "Juan M.",
+        body: "Indeed. It paved the way for AdS/CFT as well.",
+        createdAt: "2024-12-01T14:20:00Z",
+      },
+      {
+        id: "reply-2",
+        userId: "user-5",
+        userName: "Andrew S.",
+        body: "And it specifically required those 5 dimensions to work out the D-brane configuration properly.",
+        createdAt: "2024-12-02T09:15:00Z",
+      }
+    ],
   },
   {
     id: "ann-2",
     articleId: SAMPLE_ARTICLE_ID,
-    paragraphId: "p-3",
-    paragraphIndex: 2,
+    paragraphId: "p-6",
+    paragraphIndex: 5,
     userId: "user-3",
-    userName: "Daniel R.",
-    userInstitution: "Google",
-    userDepthLevel: 2,
+    userName: "Roger P.",
+    userInstitution: "Oxford",
+    userDepthLevel: 4,
     type: "question",
     highlightedText:
-      "A knowledge platform becomes valuable only when rereading is rewarded.",
-    body: "This feels right, but what product mechanic best signals rereading without making it performative? That's the hard design question.",
+      "uniqueness, spherical topology, dynamical stability",
+    body: "Will we ever find a physical mechanism that restricts higher-dimensional black holes strictly to spherical topologies without invoking additional ad-hoc symmetry constraints?",
     createdAt: "2024-12-01T11:00:00Z",
-    replyCount: 2,
-    replies: [],
+    replyCount: 1,
+    replies: [
+      {
+        id: "reply-3",
+        userId: "user-6",
+        userName: "Roberto E.",
+        body: "Given the discovery of black rings, it's clear that spherical topology isn't a strict requirement in d > 4.",
+        createdAt: "2024-12-01T16:45:00Z",
+      }
+    ],
   },
 ];
 
@@ -231,7 +254,7 @@ export const useAnnotations = create<AnnotationsState>((set, get) => ({
           isAnnotationModalOpen: false,
           highlightedText: "",
           highlightRange: null,
-          lastCreatedAnnotationId: response.data.id,
+          lastCreatedAnnotationId: finalAnnotation.id,
         }));
 
         return finalAnnotation;
@@ -275,6 +298,7 @@ export const useAnnotations = create<AnnotationsState>((set, get) => ({
       });
       
       if (response.success && response.data) {
+        const newReply = response.data;
         // Update annotation with new reply
         set((state) => {
           const articleId = state.currentArticleId;
@@ -288,7 +312,7 @@ export const useAnnotations = create<AnnotationsState>((set, get) => ({
                   return {
                     ...ann,
                     replyCount: ann.replyCount + 1,
-                    replies: [...(ann.replies || []), response.data!],
+                    replies: [...(ann.replies || []), newReply],
                   };
                 }
                 return ann;

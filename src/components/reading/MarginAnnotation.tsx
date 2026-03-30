@@ -123,6 +123,29 @@ export const MarginAnnotation: React.FC<MarginAnnotationProps> = ({
         <span>{formatRelativeTime(createdAt)}</span>
       </div>
 
+      {/* Replies Thread */}
+      {annotation.replies && annotation.replies.length > 0 && (
+        <div className="mt-4 space-y-3 border-t border-[#E8E6E1]/60 pt-4">
+          {annotation.replies.map((reply) => (
+            <div key={reply.id} className="pl-3 border-l-2 border-[#E07A5F]/30 relative pb-1">
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-5 h-5 rounded-full bg-[#E07A5F]/10 flex items-center justify-center text-[10px] font-medium text-[#1a1a1a]">
+                  {getInitials(reply.userName || 'Unknown')}
+                </div>
+                <div className="flex items-center gap-1 text-xs">
+                  <span className="font-medium text-[#1a1a1a]">{reply.userName || 'Anonymous'}</span>
+                  <span className="text-[#6B6B6B]">•</span>
+                  <span className="text-[#8A877F]">{formatRelativeTime(reply.createdAt)}</span>
+                </div>
+              </div>
+              <p className="text-[13px] text-[#4A4742] leading-relaxed mt-1">
+                {reply.body}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Expand indicator */}
       {!isExpanded && (
         <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity">
