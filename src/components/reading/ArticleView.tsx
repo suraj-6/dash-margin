@@ -689,6 +689,7 @@ export function ArticleView() {
         visible={!!highlightRange}
         x={highlightRange?.x ?? 0}
         y={highlightRange?.y ?? 0}
+        heat={highlightRange ? getHeatForParagraph(highlightRange.paragraphIndex) : 0}
         onAddToMargins={() => openAnnotationModal()}
       />
 
