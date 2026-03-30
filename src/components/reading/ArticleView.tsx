@@ -74,19 +74,15 @@ function useParagraphVisibility(paragraphCount: number, containerRef: React.RefO
   return visibleParagraphs;
 }
 
-function ReadingProgressTracker({ articleId }: { articleId: string }) {
-  useReadingProgress(articleId);
-  return null;
-}
 
 function MarginColumn() {
   const {
     selectedParagraphIndex,
     getAnnotationsForParagraph,
-    scrollDepth,
   } = useAnnotations();
+  const { hasUnlockedAnnotations, timeSpent } = useReadingProgress();
 
-  const isUnlocked = scrollDepth >= 85;
+  const isUnlocked = hasUnlockedAnnotations;
   const activeAnnotations = selectedParagraphIndex !== null
     ? getAnnotationsForParagraph(selectedParagraphIndex)
     : [];
@@ -106,7 +102,7 @@ function MarginColumn() {
             </p>
           </div>
           <div className="rounded-full border border-[#E1DBCF] bg-white/70 px-3 py-1 text-xs text-[#8A877F]">
-            {Math.min(scrollDepth, 100)}%
+            {isUnlocked ? "Unlocked" : `${Math.max(0, 30 - timeSpent)}s left`}
           </div>
         </div>
 
@@ -147,7 +143,7 @@ function MarginColumn() {
                       <div>
                         <p className="font-serif text-xl">Keep reading to see what others think</p>
                         <p className="mt-1 text-sm text-[#6B6B6B]">
-                          Annotations appear once you&apos;ve reached 85% of the article.
+                          Annotations appear once you&apos;ve read for 30 seconds.
                         </p>
                       </div>
                     </div>
@@ -155,7 +151,7 @@ function MarginColumn() {
                       <motion.div
                         className="h-full bg-[#E07A5F]"
                         initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(scrollDepth, 100)}%` }}
+                        animate={{ width: `${Math.min((timeSpent / 30) * 100, 100)}%` }}
                         transition={{ duration: 0.35 }}
                       />
                     </div>
@@ -406,6 +402,8 @@ export function ArticleView() {
     scrollDepth,
   } = useAnnotations();
 
+  const { hasUnlockedAnnotations, timeSpent } = useReadingProgress(articleId);
+
   const visibleParagraphs = useParagraphVisibility(article.content.length, articleColumnRef);
   const focusedParagraphIndex = useMemo(() => {
     if (selectedParagraphIndex !== null) return selectedParagraphIndex;
@@ -494,7 +492,6 @@ export function ArticleView() {
 
   return (
     <div className="min-h-screen bg-[#FAFAF8] text-[#1a1a1a]">
-      <ReadingProgressTracker articleId={articleId} />
 
       <div className="fixed left-0 right-0 top-16 z-40 h-[2px] bg-[#ECE7DD]">
         <motion.div
@@ -530,7 +527,7 @@ export function ArticleView() {
             </div>
             <div className="inline-flex items-center gap-2 rounded-full border border-[#E3DDD0] bg-white px-3 py-2">
               <Timer size={15} />
-              Gate unlocks at 85%
+              Gate unlocks after 30s
             </div>
           </div>
         </div>
@@ -606,11 +603,11 @@ export function ArticleView() {
             <div>
               <p className="text-sm font-medium text-[#1a1a1a]">Margins</p>
               <p className="text-xs text-[#7A766F]">
-                {scrollDepth >= 85
+                {hasUnlockedAnnotations
                   ? selectedParagraphIndex !== null
                     ? `Paragraph ${selectedParagraphIndex + 1} conversation`
                     : "Open annotations"
-                  : "Keep reading to unlock annotations"}
+                  : `${Math.max(0, 30 - timeSpent)}s of reading left`}
               </p>
             </div>
           </div>

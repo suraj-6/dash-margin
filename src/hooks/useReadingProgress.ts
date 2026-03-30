@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useAnnotations } from "@/hooks/useAnnotations";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/lib/supabase";
@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 interface ReadingProgressState {
   scrollDepth: number;
   timeSpent: number;
+  timeSpentSeconds: number;
   isCompleted: boolean;
   hasUnlockedAnnotations: boolean;
 }
@@ -18,6 +19,7 @@ export function useReadingProgress(articleId: string = "sample-article"): Readin
   const startTimeRef = useRef(Date.now());
   const lastSyncRef = useRef(Date.now());
   const timeSpentRef = useRef(0);
+  const [timeSpentSeconds, setTimeSpentSeconds] = useState(0);
 
   // Track scroll depth
   useEffect(() => {
@@ -39,6 +41,7 @@ export function useReadingProgress(articleId: string = "sample-article"): Readin
       const now = Date.now();
       const elapsedSeconds = Math.floor((now - startTimeRef.current) / 1000);
       timeSpentRef.current = elapsedSeconds;
+      setTimeSpentSeconds(elapsedSeconds);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -50,7 +53,7 @@ export function useReadingProgress(articleId: string = "sample-article"): Readin
 
     const now = Date.now();
     const timeSpentSeconds = Math.floor((now - startTimeRef.current) / 1000);
-    const isCompleted = scrollDepth >= 85 && timeSpentSeconds >= 30;
+    const isCompleted = timeSpentSeconds >= 30;
 
     try {
       const { error } = await supabase
@@ -109,13 +112,13 @@ export function useReadingProgress(articleId: string = "sample-article"): Readin
     };
   }, [saveProgress]);
 
-  const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
-  const isCompleted = scrollDepth >= 85 && timeSpent >= 30;
+  const isCompleted = timeSpentSeconds >= 30;
   const hasUnlockedAnnotations = isCompleted;
 
   return {
     scrollDepth,
-    timeSpent,
+    timeSpent: timeSpentSeconds,
+    timeSpentSeconds,
     isCompleted,
     hasUnlockedAnnotations,
   };
