@@ -400,6 +400,7 @@ export function ArticleView() {
     openAnnotationModal,
     getHeatForParagraph,
     scrollDepth,
+    isAnnotationModalOpen,
   } = useAnnotations();
 
   const { hasUnlockedAnnotations, timeSpent } = useReadingProgress(articleId);
@@ -443,6 +444,8 @@ export function ArticleView() {
   }, [setHighlightedSelection]);
 
   const handleMouseUp = useCallback(() => {
+    if (isAnnotationModalOpen) return;
+    
     const selection = window.getSelection();
     if (!selection || selection.isCollapsed || !selection.toString().trim()) {
       setHighlightedSelection(null);
@@ -477,7 +480,7 @@ export function ArticleView() {
       paragraphId,
       paragraphIndex,
     });
-  }, [setHighlightedSelection]);
+  }, [setHighlightedSelection, isAnnotationModalOpen]);
 
   useEffect(() => {
     document.addEventListener("mouseup", handleMouseUp);
