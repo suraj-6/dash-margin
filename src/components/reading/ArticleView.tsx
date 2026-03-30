@@ -583,8 +583,40 @@ export function ArticleView() {
               })}
             </div>
 
-            <div className="mt-16 border-t border-[#E8E2D7] pt-8 text-sm text-[#8A877F]">
-              <p className="font-serif italic">The best conversations happen after a careful first reading.</p>
+            <div className="mt-16 border-t border-[#E8E2D7] pt-8">
+              <p className="font-serif italic text-sm text-[#8A877F] mb-12">The best conversations happen after a careful first reading.</p>
+
+              <div className="pt-8 border-t border-[#E8E2D7]">
+                <h3 className="text-2xl font-serif text-[#1a1a1a] mb-6">Explore Related Reads</h3>
+                <div className="grid gap-5">
+                  {[
+                    {
+                      title: "Quantum Gravity and String Theory",
+                      description: "An overview of how string theory attempts to reconcile general relativity with quantum mechanics.",
+                      author: "Dr. Elena M.",
+                      time: "12 min read"
+                    },
+                    {
+                      title: "The AdS/CFT Correspondence Explained",
+                      description: "Understanding the holographic principle and its implications for higher dimensions in string theory.",
+                      author: "James Chen",
+                      time: "15 min read"
+                    },
+                    {
+                      title: "Information Paradox in Black Holes",
+                      description: "Does information actually escape a black hole? A deep dive into Hawking radiation and firewall theory.",
+                      author: "Sarah L.",
+                      time: "8 min read"
+                    }
+                  ].map((item, idx) => (
+                    <div key={idx} className="group p-6 rounded-3xl border border-[#E4DCCF] bg-white hover:border-[#E07A5F]/40 cursor-pointer transition-all hover:shadow-[0_8px_30px_rgba(224,122,95,0.06)]">
+                      <p className="text-[#E07A5F] text-[13px] font-medium mb-2 tracking-wide uppercase">{item.time} • {item.author}</p>
+                      <h4 className="font-serif text-[22px] leading-tight text-[#1a1a1a] mb-2 group-hover:text-[#E07A5F] transition-colors">{item.title}</h4>
+                      <p className="text-[15px] text-[#6B6B6B] leading-relaxed">{item.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
 
