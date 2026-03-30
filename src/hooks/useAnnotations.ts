@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { useEffect, useCallback } from "react";
 import type { Annotation, AnnotationType } from "@/lib/types";
 import { 
@@ -111,7 +112,9 @@ interface AnnotationsState {
   getHeatForParagraph: (paragraphIndex: number) => number;
 }
 
-export const useAnnotations = create<AnnotationsState>((set, get) => ({
+export const useAnnotations = create<AnnotationsState>()(
+  persist(
+    (set, get) => ({
   // Initial state
   currentArticleId: SAMPLE_ARTICLE_ID,
   scrollDepth: 0,
@@ -344,7 +347,12 @@ export const useAnnotations = create<AnnotationsState>((set, get) => ({
     const annotations = state.annotationsByArticle[state.currentArticleId] || [];
     return annotations.filter((ann) => ann.paragraphIndex === paragraphIndex).length;
   },
-}));
+}),
+  {
+    name: 'margin-annotations-storage',
+    partialize: (state) => ({ annotationsByArticle: state.annotationsByArticle }),
+  }
+));
 
 // Hook wrapper for using annotations with auto-fetch
 export function useAnnotationsForArticle(articleId: string) {

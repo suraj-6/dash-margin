@@ -1,7 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { MessageCircle, MoreHorizontal } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MessageCircle, MoreHorizontal, Send } from 'lucide-react';
 import type { Annotation, AnnotationType } from '@/lib/types';
+import { useAnnotations } from '@/hooks/useAnnotations';
 
 interface MarginAnnotationProps {
   annotation: Annotation;
@@ -63,6 +64,18 @@ export const MarginAnnotation: React.FC<MarginAnnotationProps> = ({
     replyCount,
     createdAt,
   } = annotation;
+
+  const [replyText, setReplyText] = useState('');
+  const [isReplying, setIsReplying] = useState(false);
+  const { addReply } = useAnnotations();
+
+  const handleReplySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!replyText.trim()) return;
+    await addReply(annotation.id, replyText);
+    setReplyText('');
+    setIsReplying(false);
+  };
 
   return (
     <motion.div
@@ -145,6 +158,50 @@ export const MarginAnnotation: React.FC<MarginAnnotationProps> = ({
           ))}
         </div>
       )}
+
+      {/* Reply Action */}
+      <AnimatePresence>
+        {isReplying ? (
+          <motion.form
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="mt-4 pt-3 border-t border-[#E8E6E1]/60"
+            onSubmit={handleReplySubmit}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                autoFocus
+                value={replyText}
+                onChange={(e) => setReplyText(e.target.value)}
+                placeholder="Write a reply..."
+                className="flex-1 text-sm bg-transparent border-b border-[#E07A5F]/30 px-1 py-1 focus:outline-none focus:border-[#E07A5F]"
+              />
+              <button
+                type="submit"
+                disabled={!replyText.trim()}
+                className="p-1.5 text-white bg-[#E07A5F] rounded-full disabled:opacity-50 transition-opacity"
+              >
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.form>
+        ) : (
+          <div className="mt-3 text-right">
+             <button
+               onClick={(e) => {
+                 e.stopPropagation();
+                 setIsReplying(true);
+               }}
+               className="text-[11px] font-medium text-[#c46950] hover:text-[#E07A5F] transition-colors"
+             >
+               Reply to thread
+             </button>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Expand indicator */}
       {!isExpanded && (
